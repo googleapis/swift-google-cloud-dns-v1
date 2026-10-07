@@ -17,20 +17,18 @@
 import Foundation
 @_spi(GoogleCloudInternal) public import GoogleWKT
 
-public struct ManagedZoneForwardingConfig: Codable, Equatable, GoogleWKT._AnyPackable,
+public struct ManagedZoneForwardingConfigOutboundEndpoint: Codable, Equatable, GoogleWKT
+    ._AnyPackable,
   Sendable
 {
   public var kind: Swift.String? = nil
 
-  /// The list of outbound endpoints to use for queries.
-  public var outboundEndpoints: [ManagedZoneForwardingConfigOutboundEndpoint] = []
-
-  /// List of target name servers to forward to. Cloud DNS selects the best available name server if more than one target is given.
-  public var targetNameServers: [ManagedZoneForwardingConfigNameServerTarget] = []
+  /// Specified as a resource path including project and region. This should be formatted like projects/{project}/locations/{location}/outboundEndpoints/{endpoint}
+  public var name: Swift.String? = nil
 
   @_spi(GoogleCloudInternal) public var _unknownFields: GoogleWKT._UnknownFields = .init()
 
-  /// Initialize a new instance of `ManagedZoneForwardingConfig`.
+  /// Initialize a new instance of `ManagedZoneForwardingConfigOutboundEndpoint`.
   public init() {}
 
   /// Use `config` to return a new instance of this object, with some fields updated.
@@ -38,7 +36,7 @@ public struct ManagedZoneForwardingConfig: Codable, Equatable, GoogleWKT._AnyPac
   /// Commonly used to initialize the value, for example:
   ///
   /// ```
-  /// let value = ManagedZoneForwardingConfig().with { $0.kind = ... }
+  /// let value = ManagedZoneForwardingConfigOutboundEndpoint().with { $0.kind = ... }
   /// ```
   public func with(_ config: (inout Self) throws -> Swift.Void) rethrows -> Self {
     var copy = self
@@ -53,29 +51,18 @@ public struct ManagedZoneForwardingConfig: Codable, Equatable, GoogleWKT._AnyPac
     init?(intValue: Swift.Int) { nil }
 
     static let kind = CodingKeys(stringValue: "kind")
-    static let outboundEndpoints = CodingKeys(stringValue: "outboundEndpoints")
-    static let targetNameServers = CodingKeys(stringValue: "targetNameServers")
+    static let name = CodingKeys(stringValue: "name")
 
     static let _knownKeys: Set<Swift.String> = [
       "kind",
-      "outboundEndpoints",
-      "targetNameServers",
+      "name",
     ]
   }
 
   public init(from decoder: any Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.kind = try container.decodeIfPresent(Swift.String.self, forKey: .kind)
-    if let value = try container.decodeIfPresent(
-      [ManagedZoneForwardingConfigOutboundEndpoint].self, forKey: .outboundEndpoints)
-    {
-      self.outboundEndpoints = value
-    }
-    if let value = try container.decodeIfPresent(
-      [ManagedZoneForwardingConfigNameServerTarget].self, forKey: .targetNameServers)
-    {
-      self.targetNameServers = value
-    }
+    self.name = try container.decodeIfPresent(Swift.String.self, forKey: .name)
     for key in container.allKeys where !CodingKeys._knownKeys.contains(key.stringValue) {
       self._unknownFields.json[key.stringValue] = try container.decode(
         GoogleWKT.WKTValue.self, forKey: key)
@@ -85,28 +72,27 @@ public struct ManagedZoneForwardingConfig: Codable, Equatable, GoogleWKT._AnyPac
   public func encode(to encoder: any Encoder) throws {
     var container = encoder.container(keyedBy: CodingKeys.self)
     try container.encodeIfPresent(self.kind, forKey: .kind)
-    try container.encode(self.outboundEndpoints, forKey: .outboundEndpoints)
-    try container.encode(self.targetNameServers, forKey: .targetNameServers)
+    try container.encodeIfPresent(self.name, forKey: .name)
     for (key, value) in self._unknownFields.json {
       try container.encode(value, forKey: CodingKeys(stringValue: key))
     }
   }
 
-  /// The type URL for `ManagedZoneForwardingConfig`: `"type.googleapis.com/.ManagedZoneForwardingConfig"`.
+  /// The type URL for `ManagedZoneForwardingConfigOutboundEndpoint`: `"type.googleapis.com/.ManagedZoneForwardingConfigOutboundEndpoint"`.
   public static var _anyTypeUrl: Swift.String {
-    return "type.googleapis.com/.ManagedZoneForwardingConfig"
+    return "type.googleapis.com/.ManagedZoneForwardingConfigOutboundEndpoint"
   }
 
-  /// Initialize an instance of `ManagedZoneForwardingConfig` by unpacking from a `GoogleWKT.WKTAny`.
+  /// Initialize an instance of `ManagedZoneForwardingConfigOutboundEndpoint` by unpacking from a `GoogleWKT.WKTAny`.
   ///
   /// - Parameter any: The `GoogleWKT.WKTAny` instance to unpack.
-  /// - Throws: An error if the type URL in `any` does not match `"type.googleapis.com/.ManagedZoneForwardingConfig"`,
+  /// - Throws: An error if the type URL in `any` does not match `"type.googleapis.com/.ManagedZoneForwardingConfigOutboundEndpoint"`,
   ///   or if deserialization fails.
   public init(fromAny any: GoogleWKT.WKTAny) throws {
     self = try GoogleWKT._slowAnyDeserialize(Self.self, from: any)
   }
 
-  /// Packs this `ManagedZoneForwardingConfig` into a `GoogleWKT.WKTStruct` representation.
+  /// Packs this `ManagedZoneForwardingConfigOutboundEndpoint` into a `GoogleWKT.WKTStruct` representation.
   ///
   /// - Throws: An error if serialization fails.
   public func _pack() throws -> GoogleWKT.WKTStruct {

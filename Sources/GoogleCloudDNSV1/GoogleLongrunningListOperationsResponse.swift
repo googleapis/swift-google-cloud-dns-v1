@@ -15,22 +15,25 @@
 // limitations under the License.
 
 import Foundation
+@_spi(GoogleCloudInternal) public import GoogleGax
 @_spi(GoogleCloudInternal) public import GoogleWKT
 
-public struct ManagedZoneForwardingConfig: Codable, Equatable, GoogleWKT._AnyPackable,
+/// The response message for Operations.ListOperations.
+public struct GoogleLongrunningListOperationsResponse: Codable, Equatable, GoogleWKT._AnyPackable,
   Sendable
 {
-  public var kind: Swift.String? = nil
+  /// The standard List next-page token.
+  public var nextPageToken: Swift.String? = nil
 
-  /// The list of outbound endpoints to use for queries.
-  public var outboundEndpoints: [ManagedZoneForwardingConfigOutboundEndpoint] = []
+  /// A list of operations that matches the specified filter in the request.
+  public var operations: [GoogleLongrunningOperation] = []
 
-  /// List of target name servers to forward to. Cloud DNS selects the best available name server if more than one target is given.
-  public var targetNameServers: [ManagedZoneForwardingConfigNameServerTarget] = []
+  /// Unordered list. Unreachable resources. Populated when the request sets `ListOperationsRequest.return_partial_success` and reads across collections. For example, when attempting to list all resources across all supported locations.
+  public var unreachable: [Swift.String] = []
 
   @_spi(GoogleCloudInternal) public var _unknownFields: GoogleWKT._UnknownFields = .init()
 
-  /// Initialize a new instance of `ManagedZoneForwardingConfig`.
+  /// Initialize a new instance of `GoogleLongrunningListOperationsResponse`.
   public init() {}
 
   /// Use `config` to return a new instance of this object, with some fields updated.
@@ -38,7 +41,7 @@ public struct ManagedZoneForwardingConfig: Codable, Equatable, GoogleWKT._AnyPac
   /// Commonly used to initialize the value, for example:
   ///
   /// ```
-  /// let value = ManagedZoneForwardingConfig().with { $0.kind = ... }
+  /// let value = GoogleLongrunningListOperationsResponse().with { $0.nextPageToken = ... }
   /// ```
   public func with(_ config: (inout Self) throws -> Swift.Void) rethrows -> Self {
     var copy = self
@@ -52,29 +55,27 @@ public struct ManagedZoneForwardingConfig: Codable, Equatable, GoogleWKT._AnyPac
     init(stringValue: Swift.String) { self.stringValue = stringValue }
     init?(intValue: Swift.Int) { nil }
 
-    static let kind = CodingKeys(stringValue: "kind")
-    static let outboundEndpoints = CodingKeys(stringValue: "outboundEndpoints")
-    static let targetNameServers = CodingKeys(stringValue: "targetNameServers")
+    static let nextPageToken = CodingKeys(stringValue: "nextPageToken")
+    static let operations = CodingKeys(stringValue: "operations")
+    static let unreachable = CodingKeys(stringValue: "unreachable")
 
     static let _knownKeys: Set<Swift.String> = [
-      "kind",
-      "outboundEndpoints",
-      "targetNameServers",
+      "nextPageToken",
+      "operations",
+      "unreachable",
     ]
   }
 
   public init(from decoder: any Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.kind = try container.decodeIfPresent(Swift.String.self, forKey: .kind)
+    self.nextPageToken = try container.decodeIfPresent(Swift.String.self, forKey: .nextPageToken)
     if let value = try container.decodeIfPresent(
-      [ManagedZoneForwardingConfigOutboundEndpoint].self, forKey: .outboundEndpoints)
+      [GoogleLongrunningOperation].self, forKey: .operations)
     {
-      self.outboundEndpoints = value
+      self.operations = value
     }
-    if let value = try container.decodeIfPresent(
-      [ManagedZoneForwardingConfigNameServerTarget].self, forKey: .targetNameServers)
-    {
-      self.targetNameServers = value
+    if let value = try container.decodeIfPresent([Swift.String].self, forKey: .unreachable) {
+      self.unreachable = value
     }
     for key in container.allKeys where !CodingKeys._knownKeys.contains(key.stringValue) {
       self._unknownFields.json[key.stringValue] = try container.decode(
@@ -84,32 +85,43 @@ public struct ManagedZoneForwardingConfig: Codable, Equatable, GoogleWKT._AnyPac
 
   public func encode(to encoder: any Encoder) throws {
     var container = encoder.container(keyedBy: CodingKeys.self)
-    try container.encodeIfPresent(self.kind, forKey: .kind)
-    try container.encode(self.outboundEndpoints, forKey: .outboundEndpoints)
-    try container.encode(self.targetNameServers, forKey: .targetNameServers)
+    try container.encodeIfPresent(self.nextPageToken, forKey: .nextPageToken)
+    try container.encode(self.operations, forKey: .operations)
+    try container.encode(self.unreachable, forKey: .unreachable)
     for (key, value) in self._unknownFields.json {
       try container.encode(value, forKey: CodingKeys(stringValue: key))
     }
   }
 
-  /// The type URL for `ManagedZoneForwardingConfig`: `"type.googleapis.com/.ManagedZoneForwardingConfig"`.
+  /// The type URL for `GoogleLongrunningListOperationsResponse`: `"type.googleapis.com/.GoogleLongrunningListOperationsResponse"`.
   public static var _anyTypeUrl: Swift.String {
-    return "type.googleapis.com/.ManagedZoneForwardingConfig"
+    return "type.googleapis.com/.GoogleLongrunningListOperationsResponse"
   }
 
-  /// Initialize an instance of `ManagedZoneForwardingConfig` by unpacking from a `GoogleWKT.WKTAny`.
+  /// Initialize an instance of `GoogleLongrunningListOperationsResponse` by unpacking from a `GoogleWKT.WKTAny`.
   ///
   /// - Parameter any: The `GoogleWKT.WKTAny` instance to unpack.
-  /// - Throws: An error if the type URL in `any` does not match `"type.googleapis.com/.ManagedZoneForwardingConfig"`,
+  /// - Throws: An error if the type URL in `any` does not match `"type.googleapis.com/.GoogleLongrunningListOperationsResponse"`,
   ///   or if deserialization fails.
   public init(fromAny any: GoogleWKT.WKTAny) throws {
     self = try GoogleWKT._slowAnyDeserialize(Self.self, from: any)
   }
 
-  /// Packs this `ManagedZoneForwardingConfig` into a `GoogleWKT.WKTStruct` representation.
+  /// Packs this `GoogleLongrunningListOperationsResponse` into a `GoogleWKT.WKTStruct` representation.
   ///
   /// - Throws: An error if serialization fails.
   public func _pack() throws -> GoogleWKT.WKTStruct {
     return try GoogleWKT._slowAnySerialize(message: self)
+  }
+}
+
+@_spi(GoogleCloudInternal)
+extension GoogleLongrunningListOperationsResponse: GoogleGax._PaginatedResponse {
+  public func _getPaginatedItems() -> [GoogleLongrunningOperation] {
+    return self.operations
+  }
+
+  public func _nextPageToken() -> Swift.String {
+    return self.nextPageToken ?? ""
   }
 }
